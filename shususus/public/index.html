@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Infinity Coaching and Abacus — Generate professional educational worksheets from chapter PDFs instantly.">
+  <title>Worksheet Generator — Infinity Coaching and Abacus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ═══ Animated Background ═══ -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- ═══ Header ═══ -->
+    <header class="app-header" id="app-header">
+      <div class="brand-logo-wrap" id="brand-logo-wrap">
+        <img src="/api/logo" alt="Infinity Coaching and Abacus" class="brand-logo" id="brand-logo" onerror="this.style.display='none'">
+      </div>
+      <h1 class="app-title">Worksheet Generator</h1>
+      <p class="app-subtitle">Upload a chapter PDF and get a professionally formatted worksheet in seconds.</p>
+    </header>
+
+    <!-- ═══ Main Content ═══ -->
+    <main class="main-content">
+      <form id="worksheet-form" class="generator-form" enctype="multipart/form-data">
+
+        <!-- ── PDF Upload (single card, full width) ── -->
+        <div class="upload-section">
+          <div class="upload-card" id="pdf-upload-card">
+            <div class="upload-dropzone" id="pdf-dropzone" tabindex="0" role="button" aria-label="Upload chapter PDF">
+              <div class="dropzone-icon">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                  <rect x="8" y="4" width="32" height="40" rx="4" stroke="currentColor" stroke-width="2" fill="none"/>
+                  <path d="M16 20h16M16 26h16M16 32h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M20 12h8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+                </svg>
+              </div>
+              <h3 class="dropzone-title">Upload Chapter PDF</h3>
+              <p class="dropzone-hint">Drag & drop or click to browse</p>
+              <p class="dropzone-format">PDF • Max 15MB</p>
+              <input type="file" id="pdf-input" name="pdf" accept=".pdf,application/pdf" hidden>
+            </div>
+            <div class="file-preview" id="pdf-preview" hidden>
+              <div class="preview-icon">📄</div>
+              <div class="preview-info">
+                <span class="preview-name" id="pdf-name"></span>
+                <span class="preview-size" id="pdf-size"></span>
+              </div>
+              <button type="button" class="preview-remove" id="pdf-remove" aria-label="Remove file">✕</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Settings Card ── -->
+        <div class="settings-card" id="settings-card">
+          <h2 class="settings-title">
+            <span class="settings-icon">⚙️</span>
+            Worksheet Settings
+          </h2>
+
+          <div class="form-group form-group-full">
+            <label for="class-info-input" class="form-label">Class & Subject</label>
+            <input type="text" id="class-info-input" name="classInfo" class="form-input" placeholder="Class 7 English Literature Worksheets">
+          </div>
+
+          <div class="form-group form-group-full">
+            <label for="chapter-input" class="form-label">Chapter Name</label>
+            <input type="text" id="chapter-input" name="chapterName" class="form-input" placeholder="Chapter 1: The Day the River Spoke">
+          </div>
+
+          <div class="settings-row">
+            <label class="toggle-label" for="answer-key-toggle">
+              <div class="toggle-switch">
+                <input type="checkbox" id="answer-key-toggle" name="includeAnswerKey" value="true">
+                <span class="toggle-slider"></span>
+              </div>
+              <span class="toggle-text">Generate Answer Key</span>
+              <span class="toggle-hint">Download a separate Master Answer Key PDF</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- ── Generate Button ── -->
+        <button type="submit" class="generate-btn" id="generate-btn" disabled>
+          <span class="btn-content" id="btn-content">
+            <span class="btn-icon">✨</span>
+            <span class="btn-text">Generate Worksheet</span>
+          </span>
+          <span class="btn-loading" id="btn-loading" hidden>
+            <span class="spinner"></span>
+            <span class="btn-loading-text">Processing...</span>
+          </span>
+        </button>
+      </form>
+
+      <!-- ═══ Progress Section ═══ -->
+      <div class="progress-section" id="progress-section" hidden>
+        <div class="progress-card">
+          <div class="progress-steps">
+            <div class="step" id="step-extract">
+              <div class="step-dot"></div>
+              <span class="step-label">Extracting text</span>
+            </div>
+            <div class="step" id="step-analyze">
+              <div class="step-dot"></div>
+              <span class="step-label">Analyzing content</span>
+            </div>
+            <div class="step" id="step-generate">
+              <div class="step-dot"></div>
+              <span class="step-label">Generating questions</span>
+            </div>
+            <div class="step" id="step-pdf">
+              <div class="step-dot"></div>
+              <span class="step-label">Building PDF</span>
+            </div>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ Results Section ═══ -->
+      <div class="results-section" id="results-section" hidden>
+        <div class="results-card">
+          <div class="results-header">
+            <div class="success-icon">
+              <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+                <circle cx="28" cy="28" r="26" stroke="#4ade80" stroke-width="3" fill="none"/>
+                <path d="M18 28l7 7 13-14" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h2 class="results-title">Worksheet Ready!</h2>
+            <p class="results-subtitle">Your Infinity Coaching worksheet has been generated successfully.</p>
+          </div>
+
+          <!-- Stats -->
+          <div class="stats-grid" id="stats-grid">
+            <div class="stat-card">
+              <span class="stat-value" id="stat-blanks">0</span>
+              <span class="stat-label">Fill in Blanks</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value" id="stat-tf">0</span>
+              <span class="stat-label">True / False</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value" id="stat-match">0</span>
+              <span class="stat-label">Match Pairs</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value" id="stat-short">0</span>
+              <span class="stat-label">Short Answer</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value" id="stat-long">0</span>
+              <span class="stat-label">Long Answer</span>
+            </div>
+          </div>
+
+          <!-- Download Buttons -->
+          <div class="download-actions" id="download-actions">
+            <button class="download-btn primary" id="download-worksheet">
+              <span class="dl-icon">📥</span>
+              Download Worksheet
+            </button>
+            <button class="download-btn secondary" id="download-answer-key" hidden>
+              <span class="dl-icon">📋</span>
+              Download Answer Key
+            </button>
+          </div>
+
+          <button class="new-btn" id="new-worksheet-btn">
+            <span>➕</span> Generate Another
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ Error Display ═══ -->
+      <div class="error-toast" id="error-toast" hidden>
+        <span class="error-icon">⚠️</span>
+        <span class="error-message" id="error-message"></span>
+        <button class="error-close" id="error-close">✕</button>
+      </div>
+    </main>
+
+    <!-- ═══ Footer ═══ -->
+    <footer class="app-footer">
+      <p>Infinity Coaching and Abacus — Worksheet Generator</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f6f8f8;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #050505;
+    --foreground: #ededed;
+  }
+}
+
+@theme inline {
+  --color-background-light: #f6f8f8;
+  --color-background-dark: #050505;
+  --color-primary: #13c8ec;
+  --color-gold: #FFD700;
+
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-gfs-didot);
+
+  --image-glass-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+  --image-border-gradient: linear-gradient(135deg, #13c8ec 0%, #FFD700 100%);
+  --image-holographic: linear-gradient(135deg, #13c8ec 0%, #29ffc6 50%, #13c8ec 100%);
+
+  --shadow-neon: 0 0 15px rgba(19, 200, 236, 0.3), 0 0 5px rgba(19, 200, 236, 0.2);
+  --shadow-neon-hover: 0 0 25px rgba(19, 200, 236, 0.5), 0 0 10px rgba(19, 200, 236, 0.4);
+}
+
+/* Custom Utilities */
+.glass-panel {
+  @apply relative rounded-lg transition-all duration-300;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.glass-panel:hover {
+  border-color: rgba(19, 200, 236, 0.5);
+  box-shadow: 0 0 25px rgba(19, 200, 236, 0.5), 0 0 10px rgba(19, 200, 236, 0.4);
+  transform: translateY(-2px);
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, #ffffff 0%, #e2e2e2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-holographic {
+  background-image: linear-gradient(135deg, #13c8ec 0%, #29ffc6 50%, #13c8ec 100%);
+}
+
+.bg-glass-gradient {
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+}
+
+.bg-border-gradient {
+  background-image: linear-gradient(135deg, #13c8ec 0%, #FFD700 100%);
+}
+
+.ambient-glow {
+  @apply fixed inset-0 pointer-events-none z-0;
+  background: radial-gradient(circle at 15% 50%, rgba(19, 200, 236, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(255, 215, 0, 0.05), transparent 25%);
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
